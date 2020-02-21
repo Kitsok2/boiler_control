@@ -10,5 +10,32 @@ So the regulator gets all the input data (inside temperature, outside temperatur
 This setpoint is sent to the boiler hardware using Arduino-based (include face-palm picture) OpenTherm gateway.
 At the same time, the OTGW (OpenTherm gateway) reads current status from the boiler.
 
+## Regulator settings
+min_boiler_setpoint
+max_boiler_setpoint
+min_outside_temp
+max_outside_temp
+min_boiler_temp (that one for burried)
+inside_temp_setpoint
+inside_temp_hyst
+off_boiler_setpoint
+
+## Regulator input values
+Array of room1_temp, room2_temp, ...
+outside_temp
+
+## Boiler monitoring values
+boiler_heatant_temp (int)
+boiler_flame_on (boolean)
+boiler_modulation (0-100%)
+boiler_connected (boolean)
+
+## Regulator algorythim
+Output value: boiler_setpoint
+
+if boiler_heatant_temp < min_boiler_temp { return min_boiler_setpoint }
+if min([room_temp]) > (inside_temp_setpoint + inside_temp_hyst) { return off_boiler_setpoint }
+
+if outside_temp < min_outside_temp { return max_boiler_setpoint }
 
 
