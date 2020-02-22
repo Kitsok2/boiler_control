@@ -15,11 +15,13 @@ min_boiler_setpoint
 
 max_boiler_setpoint
 
+off_boiler_setpoint
+
 min_outside_temp
 
 max_outside_temp
 
-min_boiler_temp (that one for burried)
+min_boiler_temp
 
 inside_temp_setpoint
 
@@ -44,13 +46,7 @@ boiler_connected (boolean)
 
 
 ## Regulator algorythim
-Output value: boiler_setpoint
-
-mqtt.get_all_data()
-
-ot.get_all_data()
-
-// Required heatant temp calculation
+// Required heatant temp calculation. Output value: boiler_setpoint
 
 if outside_temp < min_outside_temp { return max_boiler_setpoint }
 
@@ -66,5 +62,17 @@ if min_room_temp > (inside_temp_setpoint + inside_temp_hyst) { return False }
 
 return True
 
+// Main cycle
 
+mqtt.get_all_data()
+
+ot.get_all_data()
+
+rht = calculate_heatant_temp() // Required heatant temperature
+
+if not heat_decision() { rht = off_boiler_setpoint }
+
+ot.post_rht()
+
+mqtt.post_all_data()
 
