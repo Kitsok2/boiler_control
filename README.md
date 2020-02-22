@@ -46,12 +46,25 @@ boiler_connected (boolean)
 ## Regulator algorythim
 Output value: boiler_setpoint
 
-if boiler_heatant_temp < min_boiler_temp { return min_boiler_setpoint }
+mqtt.get_all_data()
 
-if min([room_temp]) > (inside_temp_setpoint + inside_temp_hyst) { return off_boiler_setpoint }
+ot.get_all_data()
 
+// Required heatant temp calculation
 
 if outside_temp < min_outside_temp { return max_boiler_setpoint }
+
+if outside_temp > max_outside_temp { return min_boiler_setpoint }
+
+return (max_boiler_temp - min_boiler_temp) / (max_outside_temp - min_outside_temp) * (max_outside_temp - outside_temp) + min_boiler_temp
+
+// To heat or not to heat decision
+
+if boiler_heatant_temp < min_boiler_temp { return True}
+
+if min_room_temp > (inside_temp_setpoint + inside_temp_hyst) { return False }
+
+return True
 
 
 
